@@ -1,24 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import AddBorrower from "./components/AddBorrower";
+import BorrowerList from "./components/BorrowerList";
+import Dashboard from "./components/Dashboard";
+import Login from "./components/Login";
 
 function App() {
+  const [refresh, setRefresh] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    !!localStorage.getItem("token")
+  );
+
+  if (!isLoggedIn) {
+    return <Login onLogin={() => setIsLoggedIn(true)} />;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Dashboard refresh={refresh} />
+      <AddBorrower onBorrowerAdded={() => setRefresh(!refresh)} />
+      <BorrowerList refresh={refresh} />
+    </>
   );
 }
 
